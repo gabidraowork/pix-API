@@ -25,13 +25,15 @@ export function authMiddleware(
     try {
         const payload = verifyToken(token);
 
-        req.user.id = payload.userId;
-        req.user.role = payload.role;
+        req.user = {
+            id: payload.userId,
+            role: payload.role
+        }
 
         next();
 
-    } catch {
-        
+    } catch (err){
+        console.log(err)
         return res.status(401).json({
             message: "Token inválido ou expirado"
         });

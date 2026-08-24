@@ -14,9 +14,9 @@ export interface AuthTokenPayload extends JwtPayload {
   role: Role;
 }
 
-export function generateToken(userId : number, role: string){
+export function generateToken(userId : number, role: Role){
     return jwt.sign(
-        { userId, role },
+        { userId, role},
         JWT_SECRET,
         {expiresIn : "1h"}
     );
