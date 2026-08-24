@@ -1,0 +1,70 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+datasource db {
+  provider = "postgres"
+}
+enum Role {
+  USER
+  ADMIN
+}
+enum PixKeyType {
+  CPF
+  CNPJ
+  EMAIL
+  PHONE
+  RANDOM
+}
+enum TransactionStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  CANCELED
+}
+model User {
+  id           Int      @id @default(autoincrement())
+  username     String
+  email        String   @unique
+  hashPassword String
+  role         Role     @default(USER)
+  account      Account?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+model Account {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @unique
+  balance   Decimal  @default(0) @db.Decimal(15, 2)
+  user      User     @relation(fields: [userId], references: [id])
+  pixKeys   PixKey[]
+  payments  Transaction[] @relation("PayerAccount")
+  receipts  Transaction[] @relation("PayeeAccount")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+model PixKey {
+  id           Int           @id @default(autoincrement())
+  value        String        @unique
+  type         PixKeyType
+  accountId    Int
+  account      Account       @relation(fields: [accountId], references: [id])
+  transactions Transaction[]
+  createdAt    DateTime      @default(now())
+}
+model Transaction {
+  id             Int               @id @default(autoincrement())
+  endToEndId     String            @unique
+  idempotencyKey String            @unique
+  payerAccountId Int
+  payeeAccountId Int
+  pixKeyId       Int
+  amount         Decimal           @db.Decimal(15, 2)
+  status         TransactionStatus @default(PENDING)
+  payerAccount   Account           @relation("PayerAccount", fields: [payerAccountId], references: [id])
+  payeeAccount   Account           @relation("PayeeAccount", fields: [payeeAccountId], references: [id])
+  pixKey         PixKey            @relation(fields: [pixKeyId], references: [id])
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+}
+
