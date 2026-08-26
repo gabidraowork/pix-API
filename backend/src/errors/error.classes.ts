@@ -25,3 +25,32 @@ export class ExistingPixKeyError extends Error {
   }
 }
 
+export class ExistingTransactionError extends Error {
+  constructor(message: string, public field?: string) {
+    super(message);
+    this.name = 'ExistingTransactionError';
+    // Restore prototype chain
+    Object.setPrototypeOf(this, ExistingTransactionError.prototype);
+  }
+}
+
+export class ExistingAccountError extends Error {
+  constructor(message: string, public field?: string) {
+    super(message);
+    this.name = 'ExistingAccountError';
+    // Restore prototype chain
+    Object.setPrototypeOf(this, ExistingAccountError.prototype);
+  }
+}
+
+export class BalanceError extends Error {
+  constructor(message: string, public field?: string) {
+    super(message);
+    this.name = 'BalanceError';
+    // Restore prototype chain
+    Object.setPrototypeOf(this, BalanceError.prototype);
+  }
+}
+
+
+

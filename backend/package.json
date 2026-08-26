@@ -16,6 +16,8 @@
     "@types/bcrypt": "^6.0.0",
     "@types/typescript": "^0.4.29",
     "bcrypt": "^6.0.0",
+    "bullmq": "^6.2.2",
+    "ioredis": "^6.0.0",
     "jsonwebtoken": "^9.0.3",
     "node-gyp": "^13.0.1",
     "pg": "^8.23.0",
